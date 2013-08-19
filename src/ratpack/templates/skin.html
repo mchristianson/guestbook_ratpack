@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+    <title>Welcome to Bloom!</title>
+    <link rel="stylesheet" href="/css/styles.css" type="text/css" media="screen"/>
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans&v2' rel='stylesheet' type='text/css'/>
+    <meta name="apple-mobile-web-app-capable" content="yes"/>
+    <meta name="apple-touch-fullscreen" content="yes"/>
+    <link rel="apple-touch-icon" href="/images/icon.png"/>
+
+    <script src="http://code.jquery.com/jquery-1.6.1.min.js"></script>
+
+</head>
+<body>
+
+<div id="wrap">
+
+    <!-- Welcome -->
+    <a id="welcome" href="#">Welcome to Bloom</a>
+
+
+    <!-- Guest Entry -->
+    <div id="entry" style="display:none;">
+        <form id="signin_form">
+
+            <h2 id="signin">Sign in below</h2>
+
+            <p>
+                <input type="text" name="name" placeholder="Your Name"/>
+            </p>
+
+            <p>
+                <input type="text" name="company" placeholder="Company"/>
+            </p>
+
+            <p>
+                <select name="visiting_id" style="z-index:999;">
+                    <% for (def employee : model.employees) { %>
+                    <option value="${employee.id}">${employee.firstName} ${employee.lastName}</option>
+                    <%}%>
+                </select>
+            </p>
+                <a href="#" id="submit">Sign in</a>
+
+            <div id="cancel">
+
+                <a href="#">Cancel</a>
+
+            </div>
+
+        </form>
+    </div>
+
+    <!-- Guests -->
+    <div id="guests" style="display:none;">
+
+
+        <a id="additional" class="button" href="#">Sign In</a>
+
+        <h2 id="guests-title">Guests</h2>
+
+
+        <div id="list">
+
+            <table id="guest_table">
+                <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Company</th>
+                    <th>Visiting</th>
+                    <th>Signed In</th>
+                    <th>Signed Out</th>
+                </tr>
+                </thead>
+                <tbody>
+                <% for (def guest : model.guests) { %>
+                <tr>
+                    <td>${guest.name}</td>
+                    <td>${guest.company}</td>
+                    <td class="visiting">${guest.visiting.firstName} ${guest.visiting.lastName}</td>
+                    <td>
+                        <time>${guest.checkinTime?.toString('MM/dd/yyyy hh:mm aaa')}</time>
+                    </td>
+                    <td><% if (!guest.checkoutTime) { %>
+                        <a href="#" class="float_right button checkout" id="${guest.id}">Sign Out</a>
+                        <% } else { %>
+                        <time>${guest.checkoutTime?.toString('MM/dd/yyyy h:mm aaa z')}</time>
+                        <% } %>
+                        <a href="#" class="float_right button delete" style="display:none;" id="delete_${guest.id}">Delete</a>
+                    </td>
+                </tr>
+                <% } %>
+                </tbody>
+            </table>
+
+
+        </div>
+        <div id="manage">
+
+            <a href="#">Manage</a>
+
+        </div>
+    </div>
+
+    <a href="#" id="checkout_button" class="button">Sign Out</a>
+</div>
+<script src="/js/guestbook.js" type="text/javascript"></script>
+
+</body>
+</html>
