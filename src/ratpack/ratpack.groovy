@@ -4,8 +4,10 @@ import com.bloomhealthco.guestbook.Guest
 import com.bloomhealthco.guestbook.GuestbookService
 import org.joda.time.LocalDateTime
 
-import static org.ratpackframework.groovy.RatpackScript.ratpack
-import static org.ratpackframework.groovy.Template.groovyTemplate
+import ratpack.groovy.templating.Template
+import ratpack.groovy.templating.TemplatingModule
+import static ratpack.groovy.Groovy.*
+
 
 ratpack {
 
@@ -22,7 +24,13 @@ ratpack {
         }
 
         get("checkin") {
-            Guest guest = new Guest(name: request.queryParams.name, company: request.queryParams.company, visiting: new Employee(id: request.queryParams.visiting_id as Long))
+            println request.queryParams
+            Long employeeId = request.queryParams.visiting_id as Long
+            Employee employee = service.getEmployee(employeeId)
+            println employee
+            Guest guest = service.addGuest(new Guest(name: request.queryParams.name, company: request.queryParams.company, visiting: employee))
+            println guest
+
             render groovyTemplate("checkin.html", guest: guest)
         }
 
@@ -39,6 +47,11 @@ ratpack {
             Guest guest = service.getGuest(request.queryParams.id as Long)
             service.deleteGuest(guest)
             response.send 'OK'
+        }
+
+        get("club") {
+
+            response.send 'TEST'
         }
 
         assets "public"

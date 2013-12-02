@@ -38,8 +38,8 @@ class GuestbookService {
     Guest addGuest(Guest guest) {
         Employee employee = getEmployee(guest.visiting.id)
         guest.visiting = employee
-        String sqlInsert = 'INSERT INTO guest (name, company, visiting_id, checkin_time)VALUES(?, ?, ? ,?)'
-        def keys = sql.executeInsert(sqlInsert, [guest.name,guest.company, guest.visiting.id, new LocalDateTime()])
+        String sqlInsert = 'INSERT INTO guest (name, company, visiting_id, checkin_time)VALUES(?, ?, ? ,now())'
+        def keys = sql.executeInsert(sqlInsert, [guest.name,guest.company, guest.visiting.id])
         guest.id = keys.flatten()[0] as Long
         guest
     }
